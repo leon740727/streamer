@@ -58,3 +58,32 @@ export class Stream <In> extends Duplex {
         return result;
     }
 }
+
+/**
+ * a default Transformer implement
+ * it can auto flush all data in internal buffer when upstream finish
+ */
+export class Transformer <In> extends Stream <In> {
+
+    public bufs: In[] = [];
+    public transformer: (me: Transformer<In>, data: In) => void = () => null;
+    
+    constructor() {
+        super({objectMode: true});
+
+        this.addDataListener(node => {
+            this.transformer(this, node);
+            return Promise.resolve(null);
+        });
+
+        this.on('finish', () => {
+            this.bufs.forEach(i => this.push(i));
+            this.push(null);
+        });
+    }
+
+    setTransform(transformer: (me: Transformer<In>, node: In) => void) {
+        this.transformer = transformer;
+        return this;
+    }
+}
