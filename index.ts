@@ -6,12 +6,15 @@ type DataGenerator = (size: number) => void;
 type DataConsumer<In> = (data: In, encoding?: Optional<string>) => Promise<Optional<Error>>;
 
 export class Stream <In> extends Duplex {
-    constructor(
-        options,                                                // same as node stream options
-        public dataGenerator: DataGenerator = size => null,     // same as Readable._read(size)
-        public dataListeners: DataConsumer<In>[] = [],          // same as Writable._write(...)
-        public readQueueEmptyListeners: (() => void)[] = [],
-    ) {
+    
+    public dataGenerator: DataGenerator = size => null;         // same as Readable._read(size)
+    public dataListeners: DataConsumer<In>[] = [];              // same as Writable._write(...)
+    public readQueueEmptyListeners: (() => void)[] = [];
+
+    /**
+     * @param options same as node stream options
+     */
+    constructor(options) {
         super(options);
     }
 

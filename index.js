@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const stream_1 = require("stream");
 class Stream extends stream_1.Duplex {
-    constructor(options, // same as node stream options
-    dataGenerator = size => null, // same as Readable._read(size)
-    dataListeners = [], // same as Writable._write(...)
-    readQueueEmptyListeners = []) {
+    /**
+     * @param options same as node stream options
+     */
+    constructor(options) {
         super(options);
-        this.dataGenerator = dataGenerator;
-        this.dataListeners = dataListeners;
-        this.readQueueEmptyListeners = readQueueEmptyListeners;
+        this.dataGenerator = size => null; // same as Readable._read(size)
+        this.dataListeners = []; // same as Writable._write(...)
+        this.readQueueEmptyListeners = [];
     }
     setDataGenerator(dataGenerator) {
         this.dataGenerator = dataGenerator;
